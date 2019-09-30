@@ -31,7 +31,6 @@ public class ListaActivity extends AppCompatActivity {
             fragment.doSomething(categoria);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment, fragment);
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }else{
             String testo=intent.getStringExtra("testo");
@@ -39,9 +38,7 @@ public class ListaActivity extends AppCompatActivity {
             fragment.search(testo);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment, fragment);
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

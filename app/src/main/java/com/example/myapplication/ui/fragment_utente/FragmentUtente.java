@@ -264,7 +264,7 @@ public class FragmentUtente extends Fragment {
         bio=utente.getBio();
         tel=utente.getTel();
 
-        //--------------SETTARE I DATI NELLA COMPONENTE GRAFICA---------------------------------------
+        //--------------SETTARE I DATI NELLA COMPONENTE GRAFICA-------------------------------------
 
         nomeUtente.setText(nome);
         password.setText(pass);
@@ -287,7 +287,7 @@ public class FragmentUtente extends Fragment {
             }
         }
 
-        //------------------LABEL NON MODIFICABILI---------------------------------------------------
+        //------------------LABEL NON MODIFICABILI--------------------------------------------------
         nomeUtente.setEnabled(false);
         biografia.setEnabled(false);
         telefono.setEnabled(false);

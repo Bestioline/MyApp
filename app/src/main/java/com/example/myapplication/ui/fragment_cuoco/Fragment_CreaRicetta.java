@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.R;
 import com.example.myapplication.UtilityImage;
@@ -167,11 +168,9 @@ public class Fragment_CreaRicetta extends Fragment {
         // DA VERIFICARE SE SI PUO' FARE DIVERSAMENTE
         FragmentCuoco frag=(FragmentCuoco)getParentFragment();
         frag.changeVisibility();
-
-
-       ListaRicette_Fragment ricette_fragment=new ListaRicette_Fragment();
+        ListaRicette_Fragment ricette_fragment=new ListaRicette_Fragment();
         ricette_fragment.ottieni_lista(id_cuoco);
-        getFragmentManager().beginTransaction().replace(R.id.frame_cuoco,ricette_fragment).addToBackStack(null).commit();
+        getFragmentManager().beginTransaction().replace(R.id.frame_cuoco,ricette_fragment).commit();
     }
 
 

@@ -1,16 +1,22 @@
 package com.example.myapplication.ui.fragment_evento;
 
-import java.util.ArrayList;
 import java.util.List;
-
 public class Evento {
     private String nome,id_cuoco,descrizione,data,ora,luogo,id;
     private int max_partecipanti;
-    //private List<String> lista_partecipanti=new ArrayList<>();
+    private List<String> lista_part;
+
+    public List<String> getLista_part() {
+        return lista_part;
+    }
+
+    public void setLista_part(List<String> lista_part) {
+        this.lista_part = lista_part;
+    }
 
     public Evento(){}
 
-    public Evento(String nome_evento, String id_cuoco, String descrizione, String luogo, String data, String ora, int max_partecipanti) {
+    public Evento(String nome_evento, String id_cuoco, String descrizione, String luogo, String data, String ora, int max_partecipanti, List<String> lista) {
         this.nome = nome_evento;
         this.id_cuoco = id_cuoco;
         this.descrizione = descrizione;
@@ -19,6 +25,8 @@ public class Evento {
         this.luogo=luogo;
         this.max_partecipanti = max_partecipanti;
     }
+
+
 
     @Override
     public String toString() {
@@ -90,14 +98,13 @@ public class Evento {
     }
 
     public String getId() {
+
         return id;
     }
     public void setId(String id){
+
         this.id=id;
     }
 
-    /*public List<String> getLista_partecipanti() {
-        return lista_partecipanti;
-    }*/
 
 }

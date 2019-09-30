@@ -2,26 +2,22 @@ package com.example.myapplication;
 
 import android.net.Uri;
 
+import java.util.ArrayList;
+
+
 public class Utente {
 
     private String nome,nick, bio, tel,password;
     private String email;
     private String imageProf;
+    private ArrayList<String> lista_preferiti;
+    private ArrayList<String> lista_eventi;
     private int rot;
+
+
 
     public Utente() {
     }
-
-    /*public Utente(String email,String password){
-        this.password=password;
-        this.email=email;
-        this.nome= "";
-        this.nick = "";
-        this.bio = "";
-        this.tel="";
-        this.imageProf=null;
-        this.rot=0;
-    }*/
 
 
     public Utente(String nome, String email, String nick, String bio, String tel, String password, String imageProf,int rot) {
@@ -111,5 +107,17 @@ public class Utente {
 
     public int getRot() {
         return rot;
+    }
+
+    public ArrayList<String> getLista_eventi() {
+        return lista_eventi;
+    }
+
+    public ArrayList<String> getLista_preferiti() {
+        return lista_preferiti;
+    }
+
+    public void setLista_eventi(ArrayList<String> lista_eventi) {
+        this.lista_eventi = lista_eventi;
     }
 }

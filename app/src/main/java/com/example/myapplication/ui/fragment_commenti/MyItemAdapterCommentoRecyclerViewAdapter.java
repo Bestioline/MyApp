@@ -127,7 +127,6 @@ public class MyItemAdapterCommentoRecyclerViewAdapter extends RecyclerView.Adapt
     }
 
     public void vai_profilo(ViewHolder holder, Context context){
-
         Intent myIntent = new Intent(context, ProfiloActivity.class);
         myIntent.putExtra("tipo", "commento");//Optional parameters
         myIntent.putExtra("utente", holder.id_utente);
@@ -144,7 +143,7 @@ public class MyItemAdapterCommentoRecyclerViewAdapter extends RecyclerView.Adapt
                 storage.getReference().child(cuoco.getEmail() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {//DA SISTEMARE ROTAZIONE IMMAGINE
-                        Picasso.with(holder.image_utente.getContext()).load(uri).fit().centerCrop().into(holder.image_utente);
+                        Picasso.with(holder.image_utente.getContext()).load(uri).rotate(cuoco.getRot()).fit().centerCrop().into(holder.image_utente);
                     }
                 });
             } catch (Exception e) {
@@ -166,7 +165,7 @@ public class MyItemAdapterCommentoRecyclerViewAdapter extends RecyclerView.Adapt
                 storage.getReference().child(utente.getEmail() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {//DA SISTEMARE ROTAZIONE IMMAGINE
-                        Picasso.with(holder.image_utente.getContext()).load(uri).fit().centerCrop().into(holder.image_utente);
+                        Picasso.with(holder.image_utente.getContext()).load(uri).rotate(utente.getRot()).fit().centerCrop().into(holder.image_utente);
                     }
                 });
             } catch (Exception e) {

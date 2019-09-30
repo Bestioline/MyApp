@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sfondo_grigio"
+    android:background="@drawable/sfondo_bianco_2"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ListaActivity">
 
@@ -16,7 +16,6 @@
         android:background="@drawable/sfondo_grigio"
         tools:ignore="MissingConstraints"
         tools:layout="@layout/fragment_item_list" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,7 @@
 package com.example.myapplication.ui.fragment_ricetta;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,25 +18,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.example.myapplication.R;
-import com.example.myapplication.ui.fragment_preferiti.Preferiti;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -145,26 +136,21 @@ public class ListaRicette_Fragment extends Fragment{
         }
     }
 
-    public void trovaPreferiti(String utente){
-        CollectionReference colPref=ff.collection("preferiti");
-        colPref.whereEqualTo("id_utente",utente).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void trovaPreferiti(String utente) {
+        CollectionReference colPref = ff.collection("utenti2");
+        colPref.document(""+utente).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Preferiti preferiti=document.toObject(Preferiti.class);
-                        aggiungi(preferiti.getId_ricetta());
-                    }
-
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot!=null) {
+                    ArrayList<String> lista_preferiti = (ArrayList<String>) documentSnapshot.get("lista_preferiti");
+                    ricettaList.clear();
+                    for(String s: lista_preferiti) aggiungi(s);
                 }
             }
         });
     }
 
     public void aggiungi(String id_ricetta) {
-
         if (id_ricetta != null) {
             colR = ff.collection("ricette");
             DocumentReference docRef = colR.document("" + id_ricetta);

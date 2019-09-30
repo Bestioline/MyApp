@@ -34,7 +34,6 @@ public class ProfiloActivity extends AppCompatActivity {
             fragmentCuoco.doSomething(currentID);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment, fragmentCuoco);
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
 
@@ -43,7 +42,6 @@ public class ProfiloActivity extends AppCompatActivity {
             fragmentUtente.doSomething(currentID);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment, fragmentUtente);
-            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }

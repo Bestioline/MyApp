@@ -2,11 +2,9 @@ package com.example.myapplication.ui.fragment_ricetta;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -24,18 +22,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.myapplication.R;
 import com.example.myapplication.ui.fragment_commenti.ItemCommentoFragment;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 public class FragmentRicetta extends Fragment {
     private String id,nome,ricetta,descr,foto,info,id_cuoco;
-    private int rot;
     private boolean isPref=false;
     private Context mContext;
     private boolean sezione_commenti=false;
-    public AppCompatActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +46,6 @@ public class FragmentRicetta extends Fragment {
            descr=bundle.get("descr").toString();
            info=bundle.get("info").toString();
            foto=bundle.get("foto").toString();
-
-           rot= Integer.parseInt(bundle.get("rot").toString());
         }
         bundle.putString("descr",descr);
         bundle.putString("info",info);
@@ -73,9 +63,6 @@ public class FragmentRicetta extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //VA AGGIUNTO TASTO PREFERITI
-        activity = (AppCompatActivity) view.getContext();
-
-
         TextView textView=(TextView) view.findViewById(R.id.tNomeRicetta);
         textView.setText(nome);
 
@@ -84,11 +71,9 @@ public class FragmentRicetta extends Fragment {
 
         ImageView img= (ImageView) view.findViewById(R.id.imageHomeRicetta);
 
-        /*byte[] immag = Base64.decode(foto, Base64.DEFAULT);
+        byte[] immag = Base64.decode(foto, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(immag, 0, immag.length);
-        img.setImageBitmap(bitmap);*/
-
-        caricaImg(foto,rot,img);
+        img.setImageBitmap(bitmap);
 
         Button commenti= (Button)view.findViewById(R.id.button_commenti);
 
@@ -124,22 +109,6 @@ public class FragmentRicetta extends Fragment {
                 }
             }
         });
-    }
-
-    private void caricaImg(String foto, int rot, ImageView img) {
-        StorageReference storage= FirebaseStorage.getInstance().getReference();
-        if(foto !=null){
-            try {
-                storage.child(foto).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.with(activity).load(uri).rotate(rot).fit().centerCrop().into(img);
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 

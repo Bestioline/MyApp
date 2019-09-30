@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,77 +8,71 @@
     android:id="@+id/frag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BEFFFFFF"
-    android:scrollbars="vertical"
-    tools:layout_conversion_absoluteHeight="123dp"
-    tools:layout_conversion_absoluteWidth="371dp"
-    tools:layout_editor_absoluteX="20dp"
-    tools:layout_editor_absoluteY="0dp">
+    android:isScrollContainer="true">
 
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:isScrollContainer="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/etichetta_ingredienti"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ingredienti:"
-                android:textColor="#131313"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:layout_conversion_absoluteHeight="21dp"
-                tools:layout_conversion_absoluteWidth="82dp" />
-
-            <TextView
-                android:id="@+id/tIngredienti"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="16sp"
-                tools:ignore="MissingConstraints"
-                tools:layout_conversion_absoluteHeight="21dp"
-                tools:layout_conversion_absoluteWidth="371dp" />
-
-            <TextView
-                android:id="@+id/etichetta_ricetta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ricetta:"
-                android:textColor="#222222"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:layout_conversion_absoluteHeight="21dp"
-                tools:layout_conversion_absoluteWidth="56dp" />
-
-            <TextView
-                android:id="@+id/tRicetta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="TextView"
-                android:textSize="16sp"
-                tools:ignore="MissingConstraints"
-                tools:layout_conversion_absoluteHeight="21dp"
-                tools:layout_conversion_absoluteWidth="355dp" />
-        </LinearLayout>
-    </ScrollView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_pref"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="#90FFFFFF"
+        android:isScrollContainer="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/etichetta_ingredienti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingredienti:"
+            android:textColor="#131313"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:layout_conversion_absoluteHeight="21dp"
+            tools:layout_conversion_absoluteWidth="82dp" />
+
+        <TextView
+            android:id="@+id/tIngredienti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="16sp"
+            tools:ignore="MissingConstraints"
+            tools:layout_conversion_absoluteHeight="21dp"
+            tools:layout_conversion_absoluteWidth="371dp" />
+
+        <TextView
+            android:id="@+id/etichetta_ricetta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ricetta:"
+            android:textColor="#222222"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:layout_conversion_absoluteHeight="21dp"
+            tools:layout_conversion_absoluteWidth="56dp" />
+
+        <TextView
+            android:id="@+id/tRicetta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="TextView"
+            android:textSize="16sp"
+            tools:ignore="MissingConstraints"
+            tools:layout_conversion_absoluteHeight="21dp"
+            tools:layout_conversion_absoluteWidth="355dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_pref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:clickable="true" />
+    </LinearLayout>
+
+
+
+
+</ScrollView>
 
 
 

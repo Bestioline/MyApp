@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:minHeight="720dp">
 
+
         <TextView
             android:id="@+id/nome_home_evento"
             android:layout_width="match_parent"
@@ -23,6 +24,13 @@
             android:textColor="@color/common_google_signin_btn_text_light_pressed"
             android:textSize="30dp"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/home_luogo" />
 
         <TextView
             android:id="@+id/label_cuoco"
@@ -42,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:clickable="true"
-            android:fontFamily="cursive"
+            android:fontFamily="sans-serif-condensed-light"
             android:linksClickable="true"
             android:text="nome cuoco"
             android:textAllCaps="false"
@@ -72,7 +80,7 @@
             android:text="Data"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/home_luogo" />
+            app:layout_constraintTop_toBottomOf="@id/mapView" />
 
         <TextView
             android:id="@+id/home_ora"
@@ -122,17 +130,6 @@
 
         </FrameLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            app:backgroundTint="@color/common_google_signin_btn_text_light_default"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:maxImageSize="@android:dimen/app_icon_size"
-            app:srcCompat="@android:drawable/ic_menu_add" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

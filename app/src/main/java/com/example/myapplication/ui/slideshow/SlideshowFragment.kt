@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.myapplication.R
+import com.example.myapplication.ui.fragment_evento.Lista_Fragment_Evento
 
 class SlideshowFragment : Fragment() {
 
@@ -21,11 +22,13 @@ class SlideshowFragment : Fragment() {
     ): View? {
         slideshowViewModel =
             ViewModelProviders.of(this).get(SlideshowViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
-        slideshowViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
+        val root = inflater.inflate(R.layout.fragment_evento, container, false)
+        val fragment = Lista_Fragment_Evento()
+        fragment.eventi_utente()
+        val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.nav_host_fragment, fragment)
+        fragmentTransaction.commit()
+
         return root
     }
 }

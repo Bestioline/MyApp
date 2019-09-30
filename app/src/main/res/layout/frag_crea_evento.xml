@@ -122,17 +122,30 @@
             app:layout_constraintTop_toBottomOf="@id/editNumeroP"
             tools:ignore="MissingConstraints" />
 
+        <TextView
+            android:id="@+id/scegliData"
+            android:layout_width="264dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:background="#DCEBEA"
+            android:fontFamily="casual"
+            android:text="Scegli la data"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/data"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinnerLuogo" />
         <DatePicker
             android:id="@+id/data"
-            android:layout_width="338dp"
-            android:layout_height="211dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="234dp"
+            android:layout_height="139dp"
+            android:layout_marginStart="68dp"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
-            app:layout_constraintBottom_toTopOf="@id/numeroPartec"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinnerLuogo"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@id/scegliData">
 
         </DatePicker>
 
@@ -146,7 +159,6 @@
             android:text="Numero partecipanti"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/bott_creaEvento"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/data" />
@@ -155,7 +167,7 @@
             android:id="@+id/editNumeroP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="80dp"
             android:ems="10"

@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ricetta"
     android:layout_width="match_parent"
-    android:layout_height="200dp">
+    android:layout_height="200dp"
+    android:layout_margin="10dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/id_card__ricetta"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="210dp"
         android:clickable="true"
         android:persistentDrawingCache="animation"
-        app:cardBackgroundColor="@color/common_google_signin_btn_text_dark_disabled"
-        app:cardCornerRadius="@dimen/nav_header_vertical_spacing"
-        app:cardElevation="@dimen/nav_header_vertical_spacing"
+        app:cardBackgroundColor="#D6D5D5"
+        app:cardElevation="8dp"
         app:cardMaxElevation="8dp"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
@@ -26,60 +26,80 @@
         tools:ignore="MissingConstraints">
 
 
-        <ImageView
-            android:id="@+id/image_dolce"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:clickable="false"
-            android:scaleType="fitXY"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
         <LinearLayout
-            android:id="@+id/id_linearLayout_cardCake"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:animateLayoutChanges="true"
-            android:clickable="false"
-            android:orientation="vertical"
-            tools:visibility="visible">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/nome_ricetta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:id="@+id/id_linearLayout_cardCake"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:animateLayoutChanges="true"
+                android:background="#C6FAF7F7"
+                android:clickable="false"
+                android:orientation="vertical"
+                tools:visibility="visible">
 
-                android:background="#A4E2E2E2"
-                android:fontFamily="cursive"
-                android:foreground="#00FCF9F9"
-                android:gravity="center"
-                android:text="Nome Ricetta"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/nome_ricetta"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
 
-            <TextView
-                android:id="@+id/nome_cuoco"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#86EEEEEE"
-                android:fontFamily="cursive"
-                android:gravity="top|right"
-                android:text="Nome Cuoco"
-                android:textAlignment="textStart"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="18sp"
-                android:textStyle="bold|italic"
-                tools:layout_editor_absoluteY="142dp" />
+                    android:background="#D6D5D5"
+                    android:fontFamily="cursive"
+                    android:foreground="#00FCF9F9"
+                    android:gravity="center"
+                    android:text="Nome Ricetta"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/common_google_signin_btn_text_dark_focused"
-                tools:ignore="UnknownId" />
+                <TextView
+                    android:id="@+id/nome_cuoco"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#D6D5D5"
+                    android:fontFamily="casual"
+                    android:gravity="top|right"
+                    android:text="Nome Cuoco"
+                    android:textAlignment="textStart"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    tools:layout_editor_absoluteY="142dp"
+                    tools:ignore="RtlCompat" />
 
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/common_google_signin_btn_text_dark_focused"
+                    tools:ignore="UnknownId" />
+
+                <TextView
+                    android:id="@+id/ricetta_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:fontFamily="casual"
+                    android:text="TextView" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/image_dolce"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center|end"
+                android:layout_margin="15dp"
+                android:clickable="false"
+                android:scaleType="fitXY"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
         </LinearLayout>
+        <![CDATA[
+
         />
+    ]]>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

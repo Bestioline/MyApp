@@ -2,7 +2,6 @@ package com.example.myapplication.ui.fragment_cuoco;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,9 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.Utente;
 import com.example.myapplication.ui.fragment_evento.Lista_Fragment_Evento;
 import com.example.myapplication.ui.fragment_nuovo_evento.FragmentNuovoEvento;
 import com.example.myapplication.ui.fragment_ricetta.ListaRicette_Fragment;
@@ -45,16 +42,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import static android.app.Activity.RESULT_OK;
 
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.app.Activity.RESULT_OK;
-
 public class FragmentCuoco extends Fragment {
    private String currentId;
-
 
 
     @Override
@@ -76,9 +71,8 @@ public class FragmentCuoco extends Fragment {
 
     }
 
-    private TextView emailCuoco;
-    private EditText nomeCuoco;
-
+    private TextView nomeCuoco,emailCuoco;
+    private EditText password;
     private CircleImageView foto_cuoco;
     private Button ricette,eventi;
     private FloatingActionButton add;
@@ -87,7 +81,6 @@ public class FragmentCuoco extends Fragment {
     private FirebaseFirestore db;
     private StorageReference storage=FirebaseStorage.getInstance().getReference();
     private boolean sezione_eventi=false;
-
 
     //****per la modifica del profilo
     private FloatingActionButton modificaProfilo;
@@ -98,12 +91,10 @@ public class FragmentCuoco extends Fragment {
     private Uri imageUri;
     private static final int SELECT_PICTURE = 100;
 
-
-
     @SuppressLint({"ResourceAsColor", "RestrictedApi"})
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        nomeCuoco=view.findViewById(R.id.nome_cuoco);
+        nomeCuoco=(TextView)view.findViewById(R.id.nome_cuoco);
         emailCuoco=(TextView)view.findViewById(R.id.email_cuoco);
         nuovaPassword=(EditText)view.findViewById(R.id.edit_pass_cuoco);
         foto_cuoco=(CircleImageView)view.findViewById(R.id.image_cuoco);
@@ -115,6 +106,10 @@ public class FragmentCuoco extends Fragment {
         modificaFoto = view.findViewById(R.id.modificaFotoCuoco);
         modificaFoto.setVisibility(View.GONE);
         modificaProfilo = view.findViewById(R.id.modificaCuoco);
+        if(! currentId.equals(FirebaseAuth.getInstance().getUid())) {
+            modificaProfilo.setVisibility(View.GONE);
+            modificaProfilo.setClickable(false);
+        }
         nuovaPassword.setVisibility(View.GONE);
         vecchiaPassword=view.findViewById(R.id.vecchiaPass);
         vecchiaPassword.setVisibility(View.GONE);
@@ -131,7 +126,6 @@ public class FragmentCuoco extends Fragment {
                     ricette.setClickable(true);
                     eventi.setClickable(false);
                     sezione_eventi = true;
-                    modificaProfilo.setVisibility(View.GONE);
                 }
             }
         });
@@ -146,7 +140,6 @@ public class FragmentCuoco extends Fragment {
                     ricette.setClickable(false);
                     eventi.setClickable(true);
                     sezione_eventi = false;
-                    modificaProfilo.setVisibility(View.GONE);
                 }
             }
         });
@@ -155,7 +148,6 @@ public class FragmentCuoco extends Fragment {
         if(!currentId.equals(FirebaseAuth.getInstance().getUid())){
             add.setVisibility(View.INVISIBLE);
             add.setClickable(false);
-            modificaProfilo.setVisibility(View.GONE);
         }
 
         add.setOnClickListener(new View.OnClickListener()
@@ -191,7 +183,6 @@ public class FragmentCuoco extends Fragment {
                 chooseImage();
             }
         });
-
 
     }
 
@@ -291,11 +282,12 @@ public class FragmentCuoco extends Fragment {
 
     }
 
-
     private void aggiungi_evento(){
         FragmentNuovoEvento fragmentNuovoEvento = new FragmentNuovoEvento();
         getChildFragmentManager().beginTransaction().replace(R.id.frame_cuoco,fragmentNuovoEvento).addToBackStack(null).commit();
     }
+
+
 
 
     private void crea_lista_eventi(String currentId) {
@@ -328,9 +320,9 @@ public class FragmentCuoco extends Fragment {
                 emailCuoco.setText(cuoco.getEmail());
 
                 if(currentId.equals(FirebaseAuth.getInstance().getUid()))
-                   // password.setText(cuoco.getPassword());
-              //  else
-                    //password.setVisibility(View.INVISIBLE);
+                 //   password.setText(cuoco.getPassword());
+                //else
+                  //  password.setVisibility(View.INVISIBLE);
                     if(cuoco.getImageProf() !=null){
                     try {
                         storage.child(cuoco.getEmail()+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -363,8 +355,6 @@ public class FragmentCuoco extends Fragment {
     public void doSomething(String currentID) {
         this.currentId=currentID;
     }
-
-    //metodo per scegliere l'immagine dalla galleria
     private void chooseImage() {
         ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
         Intent intent = new Intent();
@@ -448,6 +438,4 @@ public class FragmentCuoco extends Fragment {
         }
         return bm;
     }
-
-
 }
