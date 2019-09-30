@@ -192,13 +192,13 @@ public class FragmentUtente extends Fragment {
 
                                 AuthCredential credential = EmailAuthProvider
                                         .getCredential(currentUsermail, utente.getPassword());
-                                mAuth.getCurrentUser().reauthenticate(credential)
+                                FirebaseAuth.getInstance().getCurrentUser().reauthenticate(credential)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
 
-                                                    mAuth.getCurrentUser().updatePassword(nuova_pass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    FirebaseAuth.getInstance().getCurrentUser().updatePassword(nuova_pass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if (task.isSuccessful()) {
@@ -223,7 +223,7 @@ public class FragmentUtente extends Fragment {
                         }
                         //salvataggio delle informazioni dell'utente
                         Utente up = new Utente(nome,utente.getEmail(),nick,bio,tel, utente.getPassword(),currentUsermail+".jpg",utente.getRot());
-                        db.collection("utenti2").document(id).set(up);
+                        db.collection("utenti2").document(currentId).set(up);
 
                         nuova_password.setText("");
                         vecchia_password.setText("");

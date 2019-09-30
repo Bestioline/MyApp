@@ -10,7 +10,7 @@ public class Cuoco {
 
     public Cuoco (String mail, String password){
         this.email=email;
-        this.nome=nome;
+        this.password=password;
     }
 
 

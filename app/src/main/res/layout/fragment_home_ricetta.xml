@@ -27,18 +27,27 @@
         tools:layout_editor_absoluteX="48dp" />
 
 
-    <FrameLayout
-        android:id="@+id/id_frame_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="380dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginHorizontal="20dp"
-        android:addStatesFromChildren="true"
-        android:minHeight="200dp"
-        app:layout_constraintTop_toBottomOf="@id/button_descr"
-        tools:layout_editor_absoluteX="20dp">
+        android:layout_height="400dp"
+        app:layout_constraintTop_toBottomOf="@id/button_commenti">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <FrameLayout
+                android:id="@+id/id_frame_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginHorizontal="20dp"
+                android:addStatesFromChildren="true"
+                android:minHeight="200dp">
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
 
-    </FrameLayout>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_top"

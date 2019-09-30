@@ -7,6 +7,7 @@ public class Ricetta {
 
     private String  nome, ingredienti, id_cuoco, descrizione, foto,ricetta,categoria;
     private String id_ricetta="";
+    private int rot;
 
     public Ricetta(){
     }
@@ -111,5 +112,13 @@ public class Ricetta {
         jo.put("id_ricetta",id_ricetta);
         jo.put("categoria",categoria);
         return jo;
+    }
+
+    public int getRot() {
+        return rot;
+    }
+
+    public void setRot(int rot) {
+        this.rot = rot;
     }
 }

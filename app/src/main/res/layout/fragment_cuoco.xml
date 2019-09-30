@@ -21,14 +21,30 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_cuoco"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:layout_marginLeft="20dp"
+                android:layout_width="139dp"
+                android:layout_height="153dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="28dp"
                 android:src="@drawable/cuoca"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/modificaFotoCuoco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="216dp"
+                android:focusable="true"
+                android:foregroundGravity="right"
+                android:src="@android:drawable/ic_menu_camera"
+                android:visibility="visible"
+                app:backgroundTint="@color/common_google_signin_btn_text_light_default"
+                app:layout_constraintBottom_creator="@android:integer/config_longAnimTime"
+                app:layout_constraintBottom_toBottomOf="@+id/image_cuoco"
+                app:layout_constraintRight_toRightOf="parent"
+                app:rippleColor="@color/com_facebook_button_background_color_focused_disabled" />
+
+            <EditText
                 android:id="@+id/nome_cuoco"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,49 +62,70 @@
                 android:id="@+id/email_cuoco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="140dp"
                 android:background="#D2FFFFFF"
                 android:text="@string/e_mail"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="20dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintRight_toRightOf="@id/image_cuoco"
-                app:layout_constraintTop_toBottomOf="@id/nome_cuoco" />
+                app:layout_constraintTop_toBottomOf="@id/image_cuoco" />
 
-            <TextView
-                android:id="@+id/numero"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/vecchiaPass"
+                android:layout_width="188dp"
+                android:layout_height="22dp"
                 android:layout_margin="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+
                 android:background="#D2FFFFFF"
-                android:text="@string/numero_cellulare"
+                android:hint="inserisci la vecchia password"
+                android:inputType="textPassword"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="20dp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintRight_toRightOf="@id/image_cuoco"
-                app:layout_constraintTop_toBottomOf="@id/email_cuoco" />
+                app:layout_constraintTop_toBottomOf="@id/modificaCuoco" />
 
             <EditText
                 android:id="@+id/edit_pass_cuoco"
-                android:layout_width="158dp"
-                android:layout_height="35dp"
+                android:layout_width="189dp"
+                android:layout_height="20dp"
                 android:layout_margin="20dp"
-                android:backgroundTint="#F80A0A0A"
+                android:background="#D2FFFFFF"
                 android:ems="10"
+                android:hint="inserisci la nuova password"
+
                 android:inputType="textPassword"
-                android:text="@string/password"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/numero" />
+                app:layout_constraintTop_toBottomOf="@id/vecchiaPass" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/modificaCuoco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginEnd="16dp"
+                android:clickable="true"
+
+                android:foregroundGravity="right"
+                app:layout_constraintBottom_toTopOf="@id/email_cuoco"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="@id/nome_cuoco"
+                app:layout_constraintTop_toBottomOf="@id/nome_cuoco"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_menu_manage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
             android:id="@+id/frame_cuoco"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_lista">
 

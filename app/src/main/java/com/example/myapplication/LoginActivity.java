@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.ui.ThreadLockedTask;
 import com.example.myapplication.ui.fragment_cuoco.Cuoco;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,13 +22,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,8 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mEmailView;
     //label della password del login
     private EditText mPasswordView;
-    //textview di activity_login.xml
-    private TextView t;
+
     //bottone login
     private Button mEmailSignInButton;
 
@@ -50,14 +60,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseFirestore firestore;
 
-    private TextView link;
-    private boolean cuoco=false;
-    private EditText codice;
-    private Boolean risultato=false;
+
+    private String tipoUtente;
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Intent intent=getIntent();
+        tipoUtente=intent.getStringExtra("utente");
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -102,15 +115,6 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Formato email non corretta", Toast.LENGTH_LONG).show();
             return;
         }
-        if(cuoco) {
-            System.out.println("codice inserito="+codice.getText().toString());
-            corrispondeCodice(codice.getText().toString());
-            if (!risultato) {
-                Toast.makeText(getApplicationContext(), "il codice inserito non è valido", Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-
         // prova a fare l'accesso, se l'account non esiste, lo crea
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -151,9 +155,9 @@ public class LoginActivity extends AppCompatActivity {
                                                 Toast.makeText(getApplicationContext(), "Registratione avvenuta!", Toast.LENGTH_LONG).show();
                                                 user = FirebaseAuth.getInstance().getCurrentUser();
                                                 CollectionReference utenti = firestore.collection("utenti2");
-                                                if (cuoco){
-                                                    System.out.println("cuoco="+cuoco);
+                                                if (tipoUtente.equals("cuoco")){
                                                     Cuoco nuovoCuoco = new Cuoco(user.getEmail(),password);
+                                                    nuovoCuoco.setEmail(user.getEmail());
                                                     nuovoCuoco.setNome(user.getEmail().substring(0,user.getEmail().indexOf("@")));
                                                     nuovoCuoco.setImageProf(user.getEmail()+".jpg");
                                                     utenti.document(""+mAuth.getUid()).set(nuovoCuoco);
@@ -168,6 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     nuovoUtente.setNome(user.getEmail().substring(0, user.getEmail().indexOf("@")));
                                                     nuovoUtente.setNick(user.getEmail().substring(0, user.getEmail().indexOf("@")));
                                                     nuovoUtente.setImageProf(user.getEmail() + ".jpg");
+                                                    nuovoUtente.setBio("");
 
                                                     //la key dell'utente è quella del suo identificativo
                                                     //negli utenti loggati
@@ -176,15 +181,9 @@ public class LoginActivity extends AppCompatActivity {
                                                     //vai a USER PROFILE
                                                     vaiProfilo("utente");
                                                }
-
-
-
                                              }
-
                                          else
-
                                         {
-
                                             Toast.makeText(getApplicationContext(), "User Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -195,41 +194,12 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void corrispondeCodice(String codice) {
 
-        DocumentReference docRef = firestore.collection("codiciCuochi").document(""+codice);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                setRisultato(true);System.out.println("risultato="+risultato);
-            }
-        });
-
-
-    }
-
-    public void setRisultato(boolean risultato){
-        this.risultato=risultato;
-    }
     //prende i riferimenti alle label della gui
     private void initializeUI() {
         mEmailView = findViewById(R.id.username);
         mPasswordView = findViewById(R.id.password);
         mEmailSignInButton = findViewById(R.id.login);
-        codice=findViewById(R.id.codice);
-
-        link=findViewById(R.id.link);
-        codice.setVisibility(View.GONE);
-        link.setVisibility(View.VISIBLE);
-        link.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                link.setVisibility(View.GONE);
-                codice.setVisibility(View.VISIBLE);
-                cuoco=true;
-                System.out.println("cuoco="+cuoco);
-            }
-        });
     }
 
     @Override

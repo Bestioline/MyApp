@@ -20,6 +20,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 
 import com.example.myapplication.ui.fragment_cuoco.Cuoco
+import com.example.myapplication.ui.home_page.HomePage
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,9 +43,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var firestore : FirebaseFirestore
 
-    private  lateinit var utente : Utente
+    private  var utente : Utente? = Utente()
 
-    private lateinit var cuoco: Cuoco
+    private var cuoco: Cuoco? = Cuoco()
 
     private lateinit var mailMenu : TextView
 
@@ -56,7 +58,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
+        cuoco=null
+        utente=null
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance().reference
@@ -72,39 +75,37 @@ class MainActivity : AppCompatActivity() {
             val docRef = firestore.collection("utenti2").document("" + mAuth.uid)
 
             docRef.get().addOnSuccessListener { documentSnapshot ->
-                try {
-                       // if(prova(documentSnapshot)) {
+               if(documentSnapshot.get("bio")!=null){
+
+                   // if(prova(documentSnapshot)) {
                             utente = documentSnapshot.toObject(Utente::class.java)!!
-                            if (utente.imageProf != null) {
-                                storage.child(utente.email + ".jpg").getDownloadUrl()
+                            if (utente!!.imageProf != null) {
+                                storage.child(utente!!.email + ".jpg").getDownloadUrl()
                                     .addOnSuccessListener(OnSuccessListener<Uri> { uri ->
                                         //if (utente.rot)
                                         Picasso.with(this@MainActivity).load(uri)
-                                            .rotate(utente.rot.toFloat()).fit().centerCrop()
+                                            .rotate(utente!!.rot.toFloat()).fit().centerCrop()
                                             .into(imageMenu)
                                     })
-
                             }
-
-                            mailMenu.setText(utente.email)
-                            nomeMenu.setText(utente.nome)
-
-                    } catch (e: Exception) {
-
+                            mailMenu.setText(utente!!.email)
+                            nomeMenu.setText(utente!!.nome)
+                    }
+               else{
                     cuoco=documentSnapshot.toObject(Cuoco::class.java)!!
-                    if (cuoco.imageProf != null) {
-                        storage.child(cuoco.email + ".jpg").getDownloadUrl()
+                    System.out.println(" cuoco  "+cuoco);
+                    if (cuoco!!.imageProf != null) {
+                        storage.child(cuoco!!.email + ".jpg").getDownloadUrl()
                             .addOnSuccessListener(OnSuccessListener<Uri> { uri ->
                                 //if (utente.rot)
                                 Picasso.with(this@MainActivity).load(uri)
-                                    .rotate(cuoco.rot.toFloat()).fit().centerCrop()
+                                    .rotate(cuoco!!.rot.toFloat()).fit().centerCrop()
                                     .into(imageMenu)
                             })
                     }
-                    mailMenu.setText(cuoco.email)
-                    nomeMenu.setText(cuoco.nome)
-                        e.printStackTrace()
-                    }
+                    mailMenu.setText(cuoco!!.email)
+                    nomeMenu.setText(cuoco!!.nome)
+               }
             }
         }
 
@@ -112,15 +113,15 @@ class MainActivity : AppCompatActivity() {
         imageMenu.setOnClickListener(View.OnClickListener {
 
             if(mAuth.currentUser!=null){
-                if(cuoco!=null)
-                    vai_profilo("cuoco")
-                else
-                    vai_profilo("utente")
-            }else {
-                val i = Intent(this@MainActivity, LoginActivity::class.java)
-                startActivity(i)
-            }
+                val docRef = firestore.collection("utenti2").document("" + mAuth.uid)
 
+                docRef.get().addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.get("bio") != null)
+                        vai_profilo("utente")
+                    else
+                        vai_profilo("cuoco")
+                }
+            }
         })
 
 
@@ -166,40 +167,43 @@ class MainActivity : AppCompatActivity() {
         if(id==R.id.esci && mAuth.currentUser!=null) {
             FirebaseAuth.getInstance().signOut();
 
-            val i = Intent(this@MainActivity, MainActivity::class.java)
+            val i = Intent(this@MainActivity, HomePage::class.java)
             startActivity(i)
             Toast.makeText(
-                applicationContext,
-                "Logout avvenuto con successo",
-                Toast.LENGTH_LONG
-            ).show()
+                applicationContext, "Logout avvenuto con successo", Toast.LENGTH_LONG).show()
             return true;
         }
         if(id==R.id.elimina_account && mAuth.currentUser!=null) {
+
+            val pass :String = if(cuoco!=null) cuoco!!.password
+            else utente!!.password
+
             val user =mAuth.currentUser
 
             val credential = EmailAuthProvider
-                .getCredential(user?.email.toString(),utente.password )
-
+                .getCredential(user?.email.toString(),pass )
+            val uid = mAuth.uid
             // Prompt the user to re-provide their sign-in credentials
             user!!.reauthenticate(credential)
                 .addOnCompleteListener {
                     user.delete()
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                System.out.println("ID="+uid)
+                                val docRef = firestore.collection("utenti2").document(""+uid).delete().addOnCompleteListener {
 
+                                        val i = Intent(this@MainActivity, HomePage::class.java)
+                                        startActivity(i)
+                                        Toast.makeText(
+                                            applicationContext, "Eliminazione avvenuta", Toast.LENGTH_LONG).show()
+                                    }.addOnFailureListener {
+
+                                    }
                             }
                         }
-                    val docRef = firestore.collection("utenti").document(""+mAuth.uid)
-                        .delete()
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                applicationContext,
-                                "Eliminazione avvenuta",
-                                Toast.LENGTH_LONG
-                            ).show()  }
-                        .addOnFailureListener {  }
+
                 }
+
             return true
         }
 

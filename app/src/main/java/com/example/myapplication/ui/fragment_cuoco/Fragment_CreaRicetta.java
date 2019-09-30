@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -36,6 +37,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +58,8 @@ public class Fragment_CreaRicetta extends Fragment {
     private Uri imageUri;
     private String imageString;//Valore da salvare in ricetta
     private int rotazione;
-
+    private StorageReference storage;
+    private int rotazioneImg;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class Fragment_CreaRicetta extends Fragment {
         edit_ingr=(EditText)view.findViewById(R.id.edit_ingredienti);
         edit_ricetta=(EditText)view.findViewById(R.id.edit_ricetta);
         fatto=(FloatingActionButton)view.findViewById(R.id.fatto);
+        storage = FirebaseStorage.getInstance().getReference();
 
         image_foto=(ImageView)view.findViewById(R.id.foto_ricetta);
         image_foto.setOnClickListener((view1) -> {
@@ -122,8 +128,11 @@ public class Fragment_CreaRicetta extends Fragment {
                 String ingr=edit_ingr.getText().toString();
                 String nome=edit_nome.getText().toString();
                 if(ricetta!=null && descr!=null && ingr!=null && nome!=null) {
-                    Ricetta r=new Ricetta(nome,ingr,id_cuoco,descr,imageString,ricetta,categoria);
+                    //la ricetta si trova nel firebase come nomeid_cuoco.jpg
+                    Ricetta r=new Ricetta(nome,ingr,id_cuoco,descr,nome+id_cuoco+".jpg",ricetta,categoria);
+                    r.setRot(rotazioneImg);
                     aggiungi_inFirestore(r);
+                    aggiungi_immagine_storage(nome,id_cuoco);
                     ricaricaFrammento();
                 }
                 else{
@@ -131,6 +140,27 @@ public class Fragment_CreaRicetta extends Fragment {
                 }
             }
         });
+    }
+
+    private void aggiungi_immagine_storage(String nome, String id_cuoco) {
+        try {
+
+            //se ha scelto un'immagine
+            if (imageUri != null) {
+                //riferimento allo storage
+                StorageReference sRef = storage.child(nome+id_cuoco + "." + "jpg");
+                //inserimento dell'immagine
+                sRef.putFile(imageUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Toast.makeText(getContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     public void ricaricaFrammento(){
@@ -166,40 +196,37 @@ public class Fragment_CreaRicetta extends Fragment {
 
 
     //---------------------------------------METODI PER CATTURARE L'IMMAGINE------------------------------------------------------
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SELECT_PICTURE) {
-            if (resultCode == RESULT_OK) {
-                imageUri = data.getData();
-                image_foto.setImageURI(imageUri);
 
-                //operazioni volte a girare l'immagine nel caso in cui abbia una orientazione
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK
+                && data != null && data.getData() != null)
+            imageUri = data.getData();
+
+        if (imageUri != null) {
+            try {
                 String imagePath;
-                Uri targetUri = data.getData();
                 if (data.toString().contains("content:")) {
-                    imagePath = getRealPathFromURI(targetUri);
+                    imagePath = getRealPathFromURI(imageUri);
                 } else if (data.toString().contains("file:")) {
-                    imagePath = targetUri.getPath();
+                    imagePath = imageUri.getPath();
                 } else {
                     imagePath = null;
                 }
 
-                try {
-                    //operazioni per prendere la rotaione dell'immagine
-                    ExifInterface exifInterface = new ExifInterface(imagePath);
-                    int rotation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
-                    int rotationInDegrees = exifToDegrees(rotation);
-                    image_foto.setRotation(rotationInDegrees);
-
-                    //salvo l'orientazione in modo che prima di salvare l'immagine nel db la giro
-                    rotazione = rotationInDegrees;
-                    Bitmap bi = ((BitmapDrawable) image_foto.getDrawable()).getBitmap();
-                    imageString = UtilityImage.BitmapToString(bi, rotazione, image_foto);
+                ExifInterface exifInterface = new ExifInterface(imagePath);
+                int rotation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
+                int rotationInDegrees = exifToDegrees(rotation);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                //se l'immagine ha un'orientamento la giro
+                rotazioneImg= rotationInDegrees;
+                bitmap = rotate(bitmap, rotationInDegrees);
+                image_foto.setImageBitmap(bitmap);
 
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -230,6 +257,19 @@ public class Fragment_CreaRicetta extends Fragment {
                 cursor.close();
             }
         }
+    }
+    private Bitmap rotate(Bitmap bm, int rotation) {
+        if (rotation != 0) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotation);
+            try {
+                Bitmap bmOut = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+                return bmOut;
+            }catch (Exception e){}
+
+
+        }
+        return bm;
     }
 }
 
